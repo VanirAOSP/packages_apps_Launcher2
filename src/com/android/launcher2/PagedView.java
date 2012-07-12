@@ -59,8 +59,8 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
     // the min drag distance for a fling to register, to prevent random page shifts
     private static final int MIN_LENGTH_FOR_FLING = 25;
 
-    protected static final int PAGE_SNAP_ANIMATION_DURATION = 550;
-    protected static final int SLOW_PAGE_SNAP_ANIMATION_DURATION = 950;
+    protected static final int PAGE_SNAP_ANIMATION_DURATION = 120;
+    protected static final int SLOW_PAGE_SNAP_ANIMATION_DURATION = 300;
     protected static final float NANOTIME_DIV = 1000000000.0f;
 
     private static final float OVERSCROLL_ACCELERATE_FACTOR = 2;
@@ -72,9 +72,9 @@ public abstract class PagedView extends ViewGroup implements ViewGroup.OnHierarc
 
     // The following constants need to be scaled based on density. The scaled versions will be
     // assigned to the corresponding member variables below.
-    private static final int FLING_THRESHOLD_VELOCITY = 500;
-    private static final int MIN_SNAP_VELOCITY = 1500;
-    private static final int MIN_FLING_VELOCITY = 250;
+    private static final int FLING_THRESHOLD_VELOCITY = 750;
+    private static final int MIN_SNAP_VELOCITY = 2500;
+    private static final int MIN_FLING_VELOCITY = 100;
 
     static final int AUTOMATIC_PAGE_SPACING = -1;
 

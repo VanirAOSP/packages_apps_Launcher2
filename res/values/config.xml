@@ -10,23 +10,23 @@
 <!-- AllApps/Customize/AppsCustomize -->
     <!-- The alpha of the AppsCustomize bg in spring loaded mode -->
     <integer name="config_appsCustomizeSpringLoadedBgAlpha">45</integer>
-    <integer name="config_workspaceUnshrinkTime">300</integer>
+    <integer name="config_workspaceUnshrinkTime">225</integer>
     <!-- Out of 100, the percent to shrink the workspace during spring loaded mode. -->
     <integer name="config_workspaceSpringLoadShrinkPercentage">80</integer>
 
     <!-- Fade/zoom in/out duration & scale in the AllApps transition.
          Note: This should be less than the workspaceShrinkTime as they happen together. -->
-    <integer name="config_appsCustomizeZoomInTime">350</integer>
-    <integer name="config_appsCustomizeZoomOutTime">600</integer>
+    <integer name="config_appsCustomizeZoomInTime">200</integer>
+    <integer name="config_appsCustomizeZoomOutTime">450</integer>
     <integer name="config_appsCustomizeZoomScaleFactor">7</integer>
-    <integer name="config_appsCustomizeFadeInTime">250</integer>
-    <integer name="config_appsCustomizeFadeOutTime">200</integer>
-    <integer name="config_appsCustomizeWorkspaceShrinkTime">300</integer>
+    <integer name="config_appsCustomizeFadeInTime">120</integer>
+    <integer name="config_appsCustomizeFadeOutTime">120</integer>
+    <integer name="config_appsCustomizeWorkspaceShrinkTime">225</integer>
     <integer name="config_appsCustomizeWorkspaceAnimationStagger">40</integer>
     <integer name="config_workspaceAppsCustomizeAnimationStagger">100</integer>
 
     <!-- Tab transition animation duration -->
-    <integer name="config_tabTransitionDuration">250</integer>
+    <integer name="config_tabTransitionDuration">150</integer>
 
     <!-- The slope, in percent, of the drag movement needed to drag an item out of
          AppsCustomize (y / x * 100%)  -->
@@ -47,25 +47,25 @@
 
     <!-- The duration (in ms) of the fade animation on the object outlines, used when
          we are dragging objects around on the home screen. -->
-    <integer name="config_dragOutlineFadeTime">900</integer>
+    <integer name="config_dragOutlineFadeTime">750</integer>
 
     <!-- The alpha value at which to show the most recent drop visualization outline. -->
     <integer name="config_dragOutlineMaxAlpha">128</integer>
 
     <!-- Parameters controlling the animation for when an item is dropped on the home screen,
          and it animates from its old position to the new one. -->
-    <integer name="config_dropAnimMinDuration">100</integer>
-    <integer name="config_dropAnimMaxDuration">500</integer>
+    <integer name="config_dropAnimMinDuration">50</integer>
+    <integer name="config_dropAnimMaxDuration">200</integer>
 
     <!-- The duration of the UserFolder opening and closing animation -->
-    <integer name="config_folderAnimDuration">120</integer>
+    <integer name="config_folderAnimDuration">80</integer>
 
     <!-- The distance at which the animation should take the max duration -->
     <integer name="config_dropAnimMaxDist">800</integer>
 
     <!-- Properties controlling the workspace fade-out during dragging -->
     <integer name="config_dragFadeOutAlpha">80</integer>
-    <integer name="config_dragFadeOutDuration">250</integer>
+    <integer name="config_dragFadeOutDuration">200</integer>
 
     <!-- Camera distance for the overscroll effect -->
     <integer name="config_cameraDistance">6500</integer>
