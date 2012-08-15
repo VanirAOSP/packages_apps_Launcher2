@@ -582,9 +582,9 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                 mLauncher.getWorkspace().isSwitchingState()) return;
 
         if (v instanceof PagedViewIcon) {
-            // Animate some feedback to the click
-            final ApplicationInfo appInfo = (ApplicationInfo) v.getTag();
-
+            final ApplicationInfo appInfo = (ApplicationInfo) v.getTag();         
+            mLauncher.startActivitySafely(v, appInfo.intent, appInfo);
+            
             // Lock the drawable state to pressed until we return to Launcher
             if (mPressedIcon != null) {
                 mPressedIcon.lockDrawableState();
@@ -594,7 +594,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
             // to be consistent.  So re-enable the flag here, and we will re-disable it as necessary
             // when Launcher resumes and we are still in AllApps.
             mLauncher.updateWallpaperVisibility(true);
-            mLauncher.startActivitySafely(v, appInfo.intent, appInfo);
 
         } else if (v instanceof PagedViewWidget) {
             // Let the user know that they have to long press to add a widget
