@@ -1862,7 +1862,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
      * We load an extra page on each side to prevent flashes from scrolling and loading of the
      * widget previews in the background with the AsyncTasks.
      */
-    final static int sLookBehindPageCount = 4;
+    final static int sLookBehindPageCount = 3;
     final static int sLookAheadPageCount = 4;
     protected int getAssociatedLowerPageBound(int page) {
         final int count = getChildCount();
