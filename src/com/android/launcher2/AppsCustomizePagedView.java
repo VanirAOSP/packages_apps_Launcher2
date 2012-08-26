@@ -1863,7 +1863,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
      * widget previews in the background with the AsyncTasks.
      */
     final static int sLookBehindPageCount = 3;
-    final static int sLookAheadPageCount = 4;
+    final static int sLookAheadPageCount = 3;
     protected int getAssociatedLowerPageBound(int page) {
         final int count = getChildCount();
         int windowSize = Math.min(count, sLookBehindPageCount + sLookAheadPageCount + 1);
