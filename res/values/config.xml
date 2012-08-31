@@ -16,17 +16,17 @@
 
     <!-- Fade/zoom in/out duration & scale in the AllApps transition.
          Note: This should be less than the workspaceShrinkTime as they happen together. -->
-    <integer name="config_appsCustomizeZoomInTime">20</integer>
-    <integer name="config_appsCustomizeZoomOutTime">200</integer>
+    <integer name="config_appsCustomizeZoomInTime">120</integer>
+    <integer name="config_appsCustomizeZoomOutTime">150</integer>
     <integer name="config_appsCustomizeZoomScaleFactor">7</integer>
-    <integer name="config_appsCustomizeFadeInTime">21</integer>
-    <integer name="config_appsCustomizeFadeOutTime">120</integer>
-    <integer name="config_appsCustomizeWorkspaceShrinkTime">40</integer>
+    <integer name="config_appsCustomizeFadeInTime">120</integer>
+    <integer name="config_appsCustomizeFadeOutTime">150</integer>
+    <integer name="config_appsCustomizeWorkspaceShrinkTime">121</integer>
     <integer name="config_appsCustomizeWorkspaceAnimationStagger">40</integer>
     <integer name="config_workspaceAppsCustomizeAnimationStagger">100</integer>
 
     <!-- Tab transition animation duration -->
-    <integer name="config_tabTransitionDuration">150</integer>
+    <integer name="config_tabTransitionDuration">30</integer>
 
     <!-- The slope, in percent, of the drag movement needed to drag an item out of
          AppsCustomize (y / x * 100%)  -->
