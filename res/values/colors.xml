@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/* //device/apps/common/assets/res/any/colors.xml
-**
+/*
 ** Copyright 2008, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -17,6 +16,7 @@
 ** limitations under the License.
 */
 -->
+
 <resources>
     <!-- The color tints to apply to the text and drag view when hovering
          over the delete target or the info target -->

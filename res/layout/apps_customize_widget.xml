@@ -13,17 +13,16 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
 <com.android.launcher2.PagedViewWidget
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:launcher="http://schemas.android.com/apk/res/com.android.launcher"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:orientation="vertical"
-
     android:background="@drawable/focusable_view_bg"
-    android:focusable="true">
+    android:focusable="true" >
 
     <!-- The preview of the widget or shortcut. -->
     <com.android.launcher2.PagedViewWidgetImageView
@@ -43,7 +42,8 @@
         android:layout_marginTop="@dimen/app_widget_preview_label_margin_top"
         android:layout_marginLeft="@dimen/app_widget_preview_label_margin_left"
         android:layout_marginRight="@dimen/app_widget_preview_label_margin_right"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
+
         <!-- The name of the widget. -->
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/widget_name"
@@ -54,7 +54,6 @@
             android:singleLine="true"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
-
             android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
 
@@ -68,10 +67,8 @@
             android:layout_marginLeft="5dp"
             android:layout_weight="0"
             android:gravity="left"
-
             android:textColor="#FF555555"
             android:textSize="12sp" />
     </LinearLayout>
-
 
 </com.android.launcher2.PagedViewWidget>

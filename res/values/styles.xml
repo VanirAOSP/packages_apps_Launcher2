@@ -36,6 +36,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/cling_button_bg</item>
     </style>
+
     <style name="ClingTitleText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -46,6 +47,7 @@
         <item name="android:shadowDy">2</item>
         <item name="android:shadowRadius">2.0</item>
     </style>
+
     <style name="ClingText">
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">#FFFFFF</item>
@@ -88,6 +90,7 @@
         <item name="android:drawablePadding">0dp</item>
         <item name="android:paddingTop">@dimen/folder_icon_padding_top</item>
     </style>
+
     <style name="WorkspaceIcon.Landscape.Folder">
         <item name="android:drawablePadding">0dp</item>
         <item name="android:paddingTop">0dp</item>
@@ -104,6 +107,7 @@
         <item name="android:paddingRight">0dp</item>
         <item name="android:drawablePadding">2dp</item>
     </style>
+
     <style name="WorkspaceIcon.Landscape.AppsCustomize">
         <item name="android:background">@null</item>
         <item name="android:paddingTop">4dp</item>
@@ -119,25 +123,30 @@
         <item name="android:paddingLeft">@dimen/qsb_padding_left</item>
         <item name="android:paddingRight">@dimen/qsb_padding_right</item>
     </style>
+
     <style name="SearchDropTargetBar">
         <item name="android:orientation">horizontal</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+
     <style name="SearchButton">
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:paddingTop">@dimen/toolbar_button_vertical_padding</item>
         <item name="android:paddingBottom">@dimen/toolbar_button_vertical_padding</item>
     </style>
+
     <style name="SearchButtonDivider">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
+
     <style name="DropTargetButtonContainer">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
     </style>
+
     <style name="DropTargetButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
@@ -170,6 +179,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
     </style>
+
     <style name="TabIndicator.AppsCustomize">
         <!-- Overridden in values-land -->
     </style>

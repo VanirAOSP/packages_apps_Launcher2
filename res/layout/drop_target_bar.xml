@@ -13,11 +13,14 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/DropTargetButtonContainer"
-        android:layout_weight="1">
+        android:layout_weight="1" >
+
         <!-- Delete target -->
         <com.android.launcher2.DeleteDropTarget
             style="@style/DropTargetButton"
@@ -25,10 +28,12 @@
             android:text="@string/delete_zone_label_workspace"
             android:drawableLeft="@drawable/remove_target_selector" />
     </FrameLayout>
+
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/DropTargetButtonContainer"
-        android:layout_weight="1">
+        android:layout_weight="1" >
+
         <!-- Info target -->
         <com.android.launcher2.InfoDropTarget
             style="@style/DropTargetButton"
