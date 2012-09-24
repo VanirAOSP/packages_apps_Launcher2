@@ -21,4 +21,3 @@ interface TweenCallback {
     void onTweenStarted();
     void onTweenFinished();
 }
-

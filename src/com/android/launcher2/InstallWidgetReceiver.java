@@ -35,7 +35,6 @@ import android.widget.TextView;
 
 import com.android.launcher.R;
 
-
 /**
  * We will likely flesh this out later, to handle allow external apps to place widgets, but for now,
  * we just want to expose the action around for checking elsewhere.

@@ -22,8 +22,6 @@ import android.graphics.Insets;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-
-
 class PagedViewWidgetImageView extends ImageView {
     public boolean mAllowRequestLayout = true;
 

@@ -236,12 +236,12 @@ public class AppWidgetResizeFrame extends FrameLayout {
         if (Math.abs(hSpanIncF) > RESIZE_THRESHOLD) {
             hSpanInc = Math.round(hSpanIncF);
         }
+
         if (Math.abs(vSpanIncF) > RESIZE_THRESHOLD) {
             vSpanInc = Math.round(vSpanIncF);
         }
 
         if (!onDismiss && (hSpanInc == 0 && vSpanInc == 0)) return;
-
 
         CellLayout.LayoutParams lp = (CellLayout.LayoutParams) mWidgetView.getLayoutParams();
 

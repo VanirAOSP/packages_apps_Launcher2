@@ -26,13 +26,12 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 
-
 /**
  * Stores the list of all applications for the all apps view.
  */
 class AllAppsList {
     public static final int DEFAULT_APPLICATIONS_NUMBER = 42;
-    
+
     /** The list off all apps. */
     public ArrayList<ApplicationInfo> data =
             new ArrayList<ApplicationInfo>(DEFAULT_APPLICATIONS_NUMBER);
@@ -66,7 +65,7 @@ class AllAppsList {
         data.add(info);
         added.add(info);
     }
-    
+
     public void clear() {
         data.clear();
         // TODO: do we clear these too?

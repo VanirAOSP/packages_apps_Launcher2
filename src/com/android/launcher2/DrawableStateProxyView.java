@@ -38,7 +38,6 @@ public class DrawableStateProxyView extends LinearLayout {
         this(context, attrs, 0);
     }
 
-
     public DrawableStateProxyView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 

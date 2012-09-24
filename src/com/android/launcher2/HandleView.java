@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package com.android.launcher2;
 
 import android.content.Context;

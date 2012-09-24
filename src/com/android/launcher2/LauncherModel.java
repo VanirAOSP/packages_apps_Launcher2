@@ -86,6 +86,7 @@ public class LauncherModel extends BroadcastReceiver {
     static {
         sWorkerThread.start();
     }
+
     private static final Handler sWorker = new Handler(sWorkerThread.getLooper());
 
     // We start off with everything not loaded.  After that, we assume that

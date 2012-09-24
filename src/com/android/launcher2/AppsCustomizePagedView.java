@@ -97,6 +97,7 @@ class AsyncTaskPageData {
         doInBackgroundCallback = bgR;
         postExecuteCallback = postR;
     }
+
     AsyncTaskPageData(int p, ArrayList<Object> l, int cw, int ch, AsyncTaskCallback bgR,
             AsyncTaskCallback postR) {
         page = p;
@@ -107,6 +108,7 @@ class AsyncTaskPageData {
         doInBackgroundCallback = bgR;
         postExecuteCallback = postR;
     }
+
     void cleanup(boolean cancelled) {
         // Clean up any references to source/generated bitmaps
         if (sourceImages != null) {
@@ -145,6 +147,7 @@ class AppsCustomizeAsyncTask extends AsyncTask<AsyncTaskPageData, Void, AsyncTas
         threadPriority = Process.THREAD_PRIORITY_DEFAULT;
         dataType = ty;
     }
+
     @Override
     protected AsyncTaskPageData doInBackground(AsyncTaskPageData... params) {
         if (params.length != 1) return null;
@@ -152,6 +155,7 @@ class AppsCustomizeAsyncTask extends AsyncTask<AsyncTaskPageData, Void, AsyncTas
         params[0].doInBackgroundCallback.run(this, params[0]);
         return params[0];
     }
+
     @Override
     protected void onPostExecute(AsyncTaskPageData result) {
         // All the widget previews are loaded, so we can just callback to inflate the page
@@ -161,6 +165,7 @@ class AppsCustomizeAsyncTask extends AsyncTask<AsyncTaskPageData, Void, AsyncTas
     void setThreadPriority(int p) {
         threadPriority = p;
     }
+
     void syncThreadPriority() {
         Process.setThreadPriority(threadPriority);
     }
@@ -524,7 +529,6 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
                 onDataReady(width, height);
             }
         }
-
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 

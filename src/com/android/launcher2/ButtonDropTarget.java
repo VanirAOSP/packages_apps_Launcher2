@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.android.launcher.R;
 
-
 /**
  * Implements a DropTarget.
  */

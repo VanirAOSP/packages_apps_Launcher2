@@ -61,7 +61,7 @@ public class AddAdapter extends BaseAdapter {
             this.actionTag = actionTag;
         }
     }
-    
+
     public AddAdapter(Launcher launcher) {
         super();
 

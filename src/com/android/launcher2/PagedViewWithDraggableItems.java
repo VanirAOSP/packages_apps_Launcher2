@@ -21,7 +21,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-
 /* Class that does most of the work of enabling dragging items out of a PagedView by performing a
  * vertical drag. Used by both CustomizePagedView and AllAppsPagedView.
  * Subclasses must do the following:

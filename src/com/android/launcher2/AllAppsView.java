@@ -38,7 +38,7 @@ public interface AllAppsView {
     public void removeApps(ArrayList<ApplicationInfo> list);
 
     public void updateApps(ArrayList<ApplicationInfo> list);
-    
+
     // Resets the AllApps page to the front
     public void reset();
 
