@@ -157,6 +157,7 @@ public class LauncherModel extends BroadcastReceiver {
         public boolean isAllAppsVisible();
         public boolean isAllAppsButtonRank(int rank);
         public void bindSearchablesChanged();
+        public void onPageBoundSynchronously(int page);
     }
 
     LauncherModel(LauncherApplication app, IconCache iconCache) {
@@ -790,6 +791,16 @@ public class LauncherModel extends BroadcastReceiver {
         }
     }
 
+    void bindRemainingSynchronousPages() {
+        // Post the remaining side pages to be loaded
+        if (!mDeferredBindRunnables.isEmpty()) {
+            for (final Runnable r : mDeferredBindRunnables) {
+                mHandler.post(r);
+            }
+            mDeferredBindRunnables.clear();
+        }
+    }
+
     public void stopLoader() {
         synchronized (mLock) {
             if (mLoaderTask != null) {
@@ -918,6 +929,11 @@ public class LauncherModel extends BroadcastReceiver {
             // XXX: Throw an exception if we are already loading (since we touch the worker thread
             //      data structures, we can't allow any other thread to touch that data, but because
             //      this call is synchronous, we can get away with not locking).
+
+            // The LauncherModel is static in the LauncherApplication and mHandler may have queued
+            // operations from the previous activity.  We need to ensure that all queued operations
+            // are executed before any synchronous binding work is done.
+            mHandler.flush();
 
             // Divide the set of loaded items into those that we are binding synchronously, and
             // everything else that is to be bound normally (asynchronously).
@@ -1558,7 +1574,8 @@ public class LauncherModel extends BroadcastReceiver {
                 return;
             }
 
-            final int currentScreen = (synchronizeBindPage > -1) ? synchronizeBindPage :
+            final boolean isLoadingSynchronously = (synchronizeBindPage > -1);
+            final int currentScreen = isLoadingSynchronously ? synchronizeBindPage :
                 oldCallbacks.getCurrentWorkspaceScreen();
 
             // Load all the items that are on the current page first (and in the process, unbind
@@ -1609,18 +1626,30 @@ public class LauncherModel extends BroadcastReceiver {
             // Load items on the current page
             bindWorkspaceItems(oldCallbacks, currentWorkspaceItems, currentAppWidgets,
                     currentFolders, null);
+            if (isLoadingSynchronously) {
+                r = new Runnable() {
+                    public void run() {
+                        Callbacks callbacks = tryGetCallbacks(oldCallbacks);
+                        if (callbacks != null) {
+                            callbacks.onPageBoundSynchronously(currentScreen);
+                        }
+                    }
+                };
+                runOnMainThread(r);
+            }
 
-            // Load all the remaining pages
+            // Load all the remaining pages (if we are loading synchronously, we want to defer this
+            // work until after the first render)
             mDeferredBindRunnables.clear();
             bindWorkspaceItems(oldCallbacks, otherWorkspaceItems, otherAppWidgets, otherFolders,
-                    mDeferredBindRunnables);
+                    (isLoadingSynchronously ? mDeferredBindRunnables : null));
 
             // Tell the workspace that we're done binding items
             r = new Runnable() {
                 public void run() {
                     Callbacks callbacks = tryGetCallbacks(oldCallbacks);
                     if (callbacks != null) {
-                        callbacks.finishBindingItems();
+                        callbacks.startBinding();
                     }
 
                     // If we're profiling, ensure this is the last thing in the queue.
@@ -1632,7 +1661,12 @@ public class LauncherModel extends BroadcastReceiver {
                     mIsLoadingAndBindingWorkspace = false;
                 }
             };
-            mDeferredBindRunnables.add(r);
+
+            if (isLoadingSynchronously) {
+                mDeferredBindRunnables.add(r);
+            } else {
+                runOnMainThread(r);
+            }
         }
 
         private void loadAndBindAllApps() {
@@ -1664,7 +1698,7 @@ public class LauncherModel extends BroadcastReceiver {
             @SuppressWarnings("unchecked")
             final ArrayList<ApplicationInfo> list
                     = (ArrayList<ApplicationInfo>) mAllAppsList.data.clone();
-            mHandler.post(new Runnable() {
+            Runnable r = new Runnable() {
                 public void run() {
                     final long t = SystemClock.uptimeMillis();
                     final Callbacks callbacks = tryGetCallbacks(oldCallbacks);
@@ -1676,7 +1710,13 @@ public class LauncherModel extends BroadcastReceiver {
                                 + (SystemClock.uptimeMillis()-t) + "ms");
                     }
                 }
-            });
+            };
+            boolean isRunningOnMainThread = !(sWorkerThread.getThreadId() == Process.myTid());
+            if (oldCallbacks.isAllAppsVisible() && isRunningOnMainThread) {
+                r.run();
+            } else {
+                mHandler.post(r);
+            }
         }
 
         private void loadAllAppsByBatch() {
