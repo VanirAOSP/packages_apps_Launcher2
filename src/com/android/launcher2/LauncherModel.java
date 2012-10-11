@@ -791,16 +791,6 @@ public class LauncherModel extends BroadcastReceiver {
         }
     }
 
-    void bindRemainingSynchronousPages() {
-        // Post the remaining side pages to be loaded
-        if (!mDeferredBindRunnables.isEmpty()) {
-            for (final Runnable r : mDeferredBindRunnables) {
-                mHandler.post(r);
-            }
-            mDeferredBindRunnables.clear();
-        }
-    }
-
     public void stopLoader() {
         synchronized (mLock) {
             if (mLoaderTask != null) {
