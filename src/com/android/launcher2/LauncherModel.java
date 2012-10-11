@@ -1639,7 +1639,7 @@ public class LauncherModel extends BroadcastReceiver {
                 public void run() {
                     Callbacks callbacks = tryGetCallbacks(oldCallbacks);
                     if (callbacks != null) {
-                        callbacks.startBinding();
+                        callbacks.finishBindingItems();
                     }
 
                     // If we're profiling, ensure this is the last thing in the queue.
