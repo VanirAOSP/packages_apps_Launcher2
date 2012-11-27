@@ -22,7 +22,7 @@ import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 public abstract class SmoothPagedView extends PagedView {
-    private static final float SMOOTHING_SPEED = 0.75f;
+    private static final float SMOOTHING_SPEED = 0.55f;
     private static final float SMOOTHING_CONSTANT = (float) (0.016 / Math.log(SMOOTHING_SPEED));
 
     private float mBaseLineFlingVelocity;
@@ -36,7 +36,7 @@ public abstract class SmoothPagedView extends PagedView {
     private Interpolator mScrollInterpolator;
 
     public static class OvershootInterpolator implements Interpolator {
-        private static final float DEFAULT_TENSION = 1.3f;
+        private static final float DEFAULT_TENSION = 0.7f;
         private float mTension;
 
         public OvershootInterpolator() {
