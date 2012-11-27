@@ -51,6 +51,7 @@ public class DragController {
 
     private static final int SCROLL_DELAY = 350;
     private static final int RESCROLL_DELAY = 600;
+
     private static final int VIBRATE_DURATION = 15;
 
     private static final boolean PROFILE_DRAWING_DURING_DRAG = false;
