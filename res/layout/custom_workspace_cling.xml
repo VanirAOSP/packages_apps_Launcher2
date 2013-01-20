@@ -27,6 +27,5 @@
         android:textColor="@android:color/holo_blue_light"
         android:text="@string/dummy_custom_cling_error_message"
         android:gravity="left"
-        android:layout_gravity="bottom|left"
-    />
+        android:layout_gravity="bottom|left" />
 </com.android.launcher2.Cling>
