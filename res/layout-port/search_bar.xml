@@ -21,8 +21,8 @@
     android:layout_height="@dimen/search_bar_height"
     android:layout_gravity="bottom|center_horizontal"
     android:background="@drawable/search_frame">
-   <!-- Global search icon -->
-   <com.android.launcher2.HolographicLinearLayout
+    <!-- Global search icon -->
+    <com.android.launcher2.HolographicLinearLayout
         style="@style/SearchButton"
         launcher:sourceImageViewId="@+id/search_button"
         android:id="@+id/search_button_container"
@@ -37,7 +37,7 @@
         android:focusable="true"
         android:clickable="true"
         android:contentDescription="@string/accessibility_search_button">
-       <ImageView
+        <ImageView
             android:id="@+id/search_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

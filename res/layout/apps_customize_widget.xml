@@ -73,5 +73,4 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-
 </com.android.launcher2.PagedViewWidget>
