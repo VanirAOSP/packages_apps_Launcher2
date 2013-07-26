@@ -181,6 +181,7 @@ public class CellLayout extends ViewGroup {
         // A ViewGroup usually does not draw, but CellLayout needs to draw a rectangle to show
         // the user where a dragged item will land when dropped.
         setWillNotDraw(false);
+        setClipToPadding(false);
         mLauncher = (Launcher) context;
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CellLayout, defStyle, 0);
@@ -240,7 +241,7 @@ public class CellLayout extends ViewGroup {
 
         for (int i = 0; i < mDragOutlineAnims.length; i++) {
             final InterruptibleInOutAnimator anim =
-                new InterruptibleInOutAnimator(duration, fromAlphaValue, toAlphaValue);
+                new InterruptibleInOutAnimator(this, duration, fromAlphaValue, toAlphaValue);
             anim.getAnimator().setInterpolator(mEaseOutInterpolator);
             final int thisIndex = i;
             anim.getAnimator().addUpdateListener(new AnimatorUpdateListener() {
@@ -282,7 +283,9 @@ public class CellLayout extends ViewGroup {
         mForegroundRect = new Rect();
 
         mShortcutsAndWidgets = new ShortcutAndWidgetContainer(context);
-        mShortcutsAndWidgets.setCellDimensions(mCellWidth, mCellHeight, mWidthGap, mHeightGap);
+        mShortcutsAndWidgets.setCellDimensions(mCellWidth, mCellHeight, mWidthGap, mHeightGap,
+                mCountX);
+
         addView(mShortcutsAndWidgets);
     }
 
@@ -330,7 +333,14 @@ public class CellLayout extends ViewGroup {
         mOccupied = new boolean[mCountX][mCountY];
         mTmpOccupied = new boolean[mCountX][mCountY];
         mTempRectStack.clear();
+        mShortcutsAndWidgets.setCellDimensions(mCellWidth, mCellHeight, mWidthGap, mHeightGap,
+                mCountX);
         requestLayout();
+    }
+
+    // Set whether or not to invert the layout horizontally if the layout is in RTL mode.
+    public void setInvertIfRtl(boolean invert) {
+        mShortcutsAndWidgets.setInvertIfRtl(invert);
     }
 
     private void invalidateBubbleTextView(BubbleTextView icon) {
@@ -984,7 +994,8 @@ public class CellLayout extends ViewGroup {
             int vFreeSpace = vSpace - (mCountY * mCellHeight);
             mWidthGap = Math.min(mMaxGap, numWidthGaps > 0 ? (hFreeSpace / numWidthGaps) : 0);
             mHeightGap = Math.min(mMaxGap,numHeightGaps > 0 ? (vFreeSpace / numHeightGaps) : 0);
-            mShortcutsAndWidgets.setCellDimensions(mCellWidth, mCellHeight, mWidthGap, mHeightGap);
+            mShortcutsAndWidgets.setCellDimensions(mCellWidth, mCellHeight, mWidthGap, mHeightGap,
+                    mCountX);
         } else {
             mWidthGap = mOriginalWidthGap;
             mHeightGap = mOriginalHeightGap;
@@ -1127,7 +1138,7 @@ public class CellLayout extends ViewGroup {
                 return true;
             }
 
-            ValueAnimator va = LauncherAnimUtils.ofFloat(0f, 1f);
+            ValueAnimator va = LauncherAnimUtils.ofFloat(child, 0f, 1f);
             va.setDuration(duration);
             mReorderAnimators.put(lp, va);
 
@@ -2323,7 +2334,7 @@ public class CellLayout extends ViewGroup {
             if (finalDeltaX == 0 && finalDeltaY == 0) {
                 return;
             }
-            ValueAnimator va = LauncherAnimUtils.ofFloat(0f, 1f);
+            ValueAnimator va = LauncherAnimUtils.ofFloat(child, 0f, 1f);
             a = va;
             va.setRepeatMode(ValueAnimator.REVERSE);
             va.setRepeatCount(ValueAnimator.INFINITE);
@@ -3241,12 +3252,17 @@ out:            for (int i = x; i < x + spanX - 1 && x < xCount; i++) {
             this.cellVSpan = cellVSpan;
         }
 
-        public void setup(int cellWidth, int cellHeight, int widthGap, int heightGap) {
+        public void setup(int cellWidth, int cellHeight, int widthGap, int heightGap,
+                boolean invertHorizontally, int colCount) {
             if (isLockedToGrid) {
                 final int myCellHSpan = cellHSpan;
                 final int myCellVSpan = cellVSpan;
-                final int myCellX = useTmpCoords ? tmpCellX : cellX;
-                final int myCellY = useTmpCoords ? tmpCellY : cellY;
+                int myCellX = useTmpCoords ? tmpCellX : cellX;
+                int myCellY = useTmpCoords ? tmpCellY : cellY;
+
+                if (invertHorizontally) {
+                    myCellX = colCount - myCellX - cellHSpan;
+                }
 
                 width = myCellHSpan * cellWidth + ((myCellHSpan - 1) * widthGap) -
                         leftMargin - rightMargin;

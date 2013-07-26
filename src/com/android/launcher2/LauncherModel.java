@@ -53,6 +53,7 @@ import com.android.launcher2.InstallWidgetReceiver.WidgetMimeTypeHandlerData;
 import java.lang.ref.WeakReference;
 import java.net.URISyntaxException;
 import java.text.Collator;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -81,6 +82,7 @@ public class LauncherModel extends BroadcastReceiver {
     private DeferredHandler mHandler = new DeferredHandler();
     private LoaderTask mLoaderTask;
     private boolean mIsLoaderTaskRunning;
+    private volatile boolean mFlushingWorkerThread;
 
     // Specific runnable types that are run on the main thread deferred handler, this allows us to
     // clear all queued binding runnables when the Launcher activity is destroyed.
@@ -156,8 +158,10 @@ public class LauncherModel extends BroadcastReceiver {
         public void bindAllApplications(ArrayList<ApplicationInfo> apps);
         public void bindAppsAdded(ArrayList<ApplicationInfo> apps);
         public void bindAppsUpdated(ArrayList<ApplicationInfo> apps);
-        public void bindAppsRemoved(ArrayList<String> packageNames, boolean permanent);
-        public void bindPackagesUpdated();
+        public void bindComponentsRemoved(ArrayList<String> packageNames,
+                        ArrayList<ApplicationInfo> appInfos,
+                        boolean matchPackageNamesOnly);
+        public void bindPackagesUpdated(ArrayList<Object> widgetsAndShortcuts);
         public boolean isAllAppsVisible();
         public boolean isAllAppsButtonRank(int rank);
         public void bindSearchablesChanged();
@@ -370,6 +374,35 @@ public class LauncherModel extends BroadcastReceiver {
             }
         };
         runOnWorkerThread(r);
+    }
+
+    public void flushWorkerThread() {
+        mFlushingWorkerThread = true;
+        Runnable waiter = new Runnable() {
+                public void run() {
+                    synchronized (this) {
+                        notifyAll();
+                        mFlushingWorkerThread = false;
+                    }
+                }
+            };
+
+        synchronized(waiter) {
+            runOnWorkerThread(waiter);
+            if (mLoaderTask != null) {
+                synchronized(mLoaderTask) {
+                    mLoaderTask.notify();
+                }
+            }
+            boolean success = false;
+            while (!success) {
+                try {
+                    waiter.wait();
+                    success = true;
+                } catch (InterruptedException e) {
+                }
+            }
+        }
     }
 
     /**
@@ -1001,9 +1034,11 @@ public class LauncherModel extends BroadcastReceiver {
                         }
                     });
 
-                while (!mStopped && !mLoadAndBindStepFinished) {
+                while (!mStopped && !mLoadAndBindStepFinished && !mFlushingWorkerThread) {
                     try {
-                        this.wait();
+                        // Just in case mFlushingWorkerThread changes but we aren't woken up,
+                        // wait no longer than 1sec at a time
+                        this.wait(1000);
                     } catch (InterruptedException ex) {
                         // Ignore
                     }
@@ -1988,6 +2023,10 @@ public class LauncherModel extends BroadcastReceiver {
                     for (int i=0; i<N; i++) {
                         if (DEBUG_LOADERS) Log.d(TAG, "mAllAppsList.updatePackage " + packages[i]);
                         mBgAllAppsList.updatePackage(context, packages[i]);
+                        LauncherApplication app =
+                                (LauncherApplication) context.getApplicationContext();
+                        WidgetPreviewLoader.removeFromDb(
+                                app.getWidgetPreviewCacheDb(), packages[i]);
                     }
                     break;
                 case OP_REMOVE:
@@ -1995,12 +2034,17 @@ public class LauncherModel extends BroadcastReceiver {
                     for (int i=0; i<N; i++) {
                         if (DEBUG_LOADERS) Log.d(TAG, "mAllAppsList.removePackage " + packages[i]);
                         mBgAllAppsList.removePackage(packages[i]);
+                        LauncherApplication app =
+                                (LauncherApplication) context.getApplicationContext();
+                        WidgetPreviewLoader.removeFromDb(
+                                app.getWidgetPreviewCacheDb(), packages[i]);
                     }
                     break;
             }
 
             ArrayList<ApplicationInfo> added = null;
             ArrayList<ApplicationInfo> modified = null;
+            final ArrayList<ApplicationInfo> removedApps = new ArrayList<ApplicationInfo>();
 
             if (mBgAllAppsList.added.size() > 0) {
                 added = new ArrayList<ApplicationInfo>(mBgAllAppsList.added);
@@ -2010,16 +2054,9 @@ public class LauncherModel extends BroadcastReceiver {
                 modified = new ArrayList<ApplicationInfo>(mBgAllAppsList.modified);
                 mBgAllAppsList.modified.clear();
             }
-            // We may be removing packages that have no associated launcher application, so we
-            // pass through the removed package names directly.
-            // NOTE: We flush the icon cache aggressively in removePackage() above.
-            final ArrayList<String> removedPackageNames = new ArrayList<String>();
             if (mBgAllAppsList.removed.size() > 0) {
+                removedApps.addAll(mBgAllAppsList.removed);
                 mBgAllAppsList.removed.clear();
-
-                for (int i = 0; i < N; ++i) {
-                    removedPackageNames.add(packages[i]);
-                }
             }
 
             final Callbacks callbacks = mCallbacks != null ? mCallbacks.get() : null;
@@ -2050,28 +2087,48 @@ public class LauncherModel extends BroadcastReceiver {
                     }
                 });
             }
-            if (!removedPackageNames.isEmpty()) {
-                final boolean permanent = mOp != OP_UNAVAILABLE;
+            // If a package has been removed, or an app has been removed as a result of
+            // an update (for example), make the removed callback.
+            if (mOp == OP_REMOVE || !removedApps.isEmpty()) {
+                final boolean permanent = (mOp == OP_REMOVE);
+                final ArrayList<String> removedPackageNames =
+                        new ArrayList<String>(Arrays.asList(packages));
+
                 mHandler.post(new Runnable() {
                     public void run() {
                         Callbacks cb = mCallbacks != null ? mCallbacks.get() : null;
                         if (callbacks == cb && cb != null) {
-                            callbacks.bindAppsRemoved(removedPackageNames, permanent);
+                            callbacks.bindComponentsRemoved(removedPackageNames,
+                                    removedApps, permanent);
                         }
                     }
                 });
             }
 
+            final ArrayList<Object> widgetsAndShortcuts =
+                getSortedWidgetsAndShortcuts(context);
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     Callbacks cb = mCallbacks != null ? mCallbacks.get() : null;
                     if (callbacks == cb && cb != null) {
-                        callbacks.bindPackagesUpdated();
+                        callbacks.bindPackagesUpdated(widgetsAndShortcuts);
                     }
                 }
             });
         }
+    }
+
+    // Returns a list of ResolveInfos/AppWindowInfos in sorted order
+    public static ArrayList<Object> getSortedWidgetsAndShortcuts(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        final ArrayList<Object> widgetsAndShortcuts = new ArrayList<Object>();
+        widgetsAndShortcuts.addAll(AppWidgetManager.getInstance(context).getInstalledProviders());
+        Intent shortcutsIntent = new Intent(Intent.ACTION_CREATE_SHORTCUT);
+        widgetsAndShortcuts.addAll(packageManager.queryIntentActivities(shortcutsIntent, 0));
+        Collections.sort(widgetsAndShortcuts,
+            new LauncherModel.WidgetAndShortcutNameComparator(packageManager));
+        return widgetsAndShortcuts;
     }
 
     /**
