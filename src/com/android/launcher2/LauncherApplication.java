@@ -108,7 +108,7 @@ public class LauncherApplication extends Application {
         return mModel;
     }
 
-    IconCache getIconCache() {
+    public IconCache getIconCache() {
         return mIconCache;
     }
 

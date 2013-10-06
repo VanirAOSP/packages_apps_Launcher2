@@ -275,4 +275,13 @@ s -->
     <!-- Dummy string [CHAR_LIMIT=60] -->
     <string name="custom_workspace_cling_description_2"></string>
 
+    <string name="vanir_dream_title">Vanir Dreamscreen</string>
+    <string name="vanir_dream_settings_title">Vanir Daydream Settings</string>
+    <string name="vanir_dream_interactive_title">Interactive mode</string>
+    <string name="vanir_dream_rotation_title">Rotating images</string>
+    <string name="vanir_dream_count_title">Number of images</string>
+    <string name="vanir_dream_debug_title">Debug Mode</string>
+    <string name="vanir_dream_mob_max_count_warning">Maximum Vanir Mob size:</string>
+    <string name="vanir_dream_current_mob_size">Current Mob size:</string>
+
 </resources>
